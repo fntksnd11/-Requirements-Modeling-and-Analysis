@@ -8,13 +8,11 @@
 - **PUBLISHER**: `id` (INT, PK), `publisher_name` (String).
 - **APP**: `id` (INT, PK), `publisher_id` (INT, FK), `title` (String), `price` (Decimal).
 - **CATEGORY**: `id` (INT, PK), `category_name` (String).
-- **APP_CATEGORY**: `app_id` (INT, FK), `category_id` (INT, FK).
-- **WISHLIST**: `user_id` (BIGINT, FK), `app_id` (INT, FK), `added_at` (DateTime).
 
 3. Зв'язки:
-- `PUBLISHER` ── `APP`: **1:N**
-- `APP` ── `APP_CATEGORY` ── `CATEGORY`: **1:N** та **N:1**
-- `USER` ── `WISHLIST` ── `APP`: **1:N** та **N:1**
+- `PUBLISHER` ── `APP`: **1:N** (*publishes*)
+- `APP` ── `CATEGORY`: **M:N** (*belongs_to*, чистий M:N)
+- `USER` ── `APP`: **M:N** (*wishes*, Wishlist, чистий M:N)
 
 4. Критерії прийняття:
-Модель повинна містити основні сутності користувачів, ігор та категорій.
+**Чисті M:N**:ШІшка додала окремі атрибути (`App`↔`Category`, `Wishlist`),видаляємо і сформульовуємо як чисті M:N зв'язки.
