@@ -4,10 +4,10 @@
 Розробити ER-модель для платформи Steam.
 
 2. Сутності та атрибути:
-- **USER**: `id` (BIGINT, PK), `username` (String), `email` (String).
-- **PUBLISHER**: `id` (INT, PK), `publisher_name` (String).
-- **APP**: `id` (INT, PK), `publisher_id` (INT, FK), `title` (String), `price` (Decimal).
-- **CATEGORY**: `id` (INT, PK), `category_name` (String).
+- **USER**: `id` (UUID, PK), `username` (String), `email` (String).
+- **PUBLISHER**: `id` (UUID, PK), `publisher_name` (String).
+- **APP**: `id` (UUID, PK), `publisher_id` (UUID, FK), `title` (String), `price` (Decimal).
+- **CATEGORY**: `id` (UUID, PK), `category_name` (String).
 
 3. Зв'язки:
 - `PUBLISHER` ── `APP`: **1:N** (*publishes*)
@@ -16,3 +16,4 @@
 
 4. Критерії прийняття:
 **Чисті M:N**:ШІшка додала окремі атрибути (`App`↔`Category`, `Wishlist`),видаляємо і сформульовуємо як чисті M:N зв'язки.
+**Типізація ID**: Усі Primary Keys мають єдиний тип `UUID`.
