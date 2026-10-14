@@ -1,4 +1,7 @@
+```markdown
+# Use Case Діаграма: Steam Digital Store
 
+```plantuml
 @startuml
 left to right direction
 actor "Gamer" as gamer
