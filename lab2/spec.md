@@ -12,15 +12,9 @@
 - **[REQ-EV-03]**: **WHEN** користувач оформлює замовлення (`ORDER`), система **SHALL** ініціювати платіж до `Payment Gateway`.
 - **[REQ-ST-04]**: **WHILE** статус замовлення є `Pending`, система **SHALL** блокувати повторну покупку.
 - **[REQ-CD-05]**: **IF** платіж підтверджено, **THEN** система **SHALL** змінити статус замовлення на `Completed` та оновити `USER_LIBRARY`.
-- **[REQ-CD-06]**: **IF** гра має `app_type = 'DLC'`, **THEN** система **SHALL** перевіряти наявність `parent_game_id`. *(Непокрита вимога)*.
+- **[REQ-CD-06]**: IF гра має app_type = 'DLC', THEN система SHALL перевіряти наявність parent_game_id. *(Непокрита вимога)*.
 
-
-
-
-
-
-
-  | Вимога (EARS ID) | Прецеденти / User Story | Пов'язані сутності бази даних (ЛР1) | Тип зв'язку | Статус покриття |
+| Вимога (EARS ID) | Прецеденти / User Story | Пов'язані сутності бази даних (ЛР1) | Тип зв'язку | Статус покриття |
 | :--- | :--- | :--- | :--- | :--- |
 | **[REQ-UB-01]** | `UC-01` (Browse Catalog), <br> `US-01` (Play & Library) | `USER`, `USER_LIBRARY`, `APP` | **M:N** | ✅ **Covered** |
 | **[REQ-EV-02]** | `UC-02` (Checkout Order), <br> `US-01` (Purchase Flow) | `USER`, `APP`, `USER_LIBRARY` | **M:N** | ✅ **Covered** |
@@ -28,7 +22,6 @@
 | **[REQ-ST-04]** | `UC-02` (Checkout Order) | `ORDER`, `ORDER_ITEM` | **1:N** | ✅ **Covered** |
 | **[REQ-CD-05]** | `UC-02` (Checkout Order), <br> `US-01` (Purchase Flow) | `ORDER`, `USER_LIBRARY`, `Payment Gateway` | **M:N** | ✅ **Covered** |
 | **[REQ-CD-06]** | *Відсутній (Planned for Sprint 2)* | `APP` (`parent_game_id`) | **Self-Ref** | ⚠️ **UNCOVERED** *(Технічний борг)* |
-
 
 
 
