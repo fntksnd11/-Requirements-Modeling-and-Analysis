@@ -14,13 +14,7 @@
 - **[REQ-CD-05]**: **IF** платіж підтверджено, **THEN** система **SHALL** змінити статус замовлення на `Completed` та оновити `USER_LIBRARY`.
 - **[REQ-CD-06]**: **IF** гра має `app_type = 'DLC'`, **THEN** система **SHALL** перевіряти наявність `parent_game_id`. *(Непокрита вимога)*.
 
-## 4. User Stories та Gherkin
-**US-01: Купівля гри**
-```gherkin
-Scenario: Успішна купівля гри
-  Given користувач авторизований та обрав гру
-  When користувач підтверджує замовлення
-  Then система змінює статус замовлення на Completed та оновлює USER_LIBRARY
+
 
 
 
@@ -34,3 +28,20 @@ Scenario: Успішна купівля гри
 | **[REQ-ST-04]** | `UC-02` (Checkout Order) | `ORDER`, `ORDER_ITEM` | **1:N** | ✅ **Covered** |
 | **[REQ-CD-05]** | `UC-02` (Checkout Order), <br> `US-01` (Purchase Flow) | `ORDER`, `USER_LIBRARY`, `Payment Gateway` | **M:N** | ✅ **Covered** |
 | **[REQ-CD-06]** | *Відсутній (Planned for Sprint 2)* | `APP` (`parent_game_id`) | **Self-Ref** | ⚠️ **UNCOVERED** *(Технічний борг)* |
+
+
+
+
+## 4. User Stories та Gherkin
+**US-01: Купівля гри**
+```gherkin
+Scenario: Успішна купівля гри
+  Given користувач авторизований та обрав гру
+  When користувач підтверджує замовлення
+  Then система змінює статус замовлення на Completed та оновлює USER_LIBRARY
+
+
+
+
+
+
