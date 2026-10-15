@@ -21,3 +21,16 @@ Scenario: Успішна купівля гри
   Given користувач авторизований та обрав гру
   When користувач підтверджує замовлення
   Then система змінює статус замовлення на Completed та оновлює USER_LIBRARY
+
+
+
+
+
+  | Вимога (EARS ID) | Прецеденти / User Story | Пов'язані сутності бази даних (ЛР1) | Тип зв'язку | Статус покриття |
+| :--- | :--- | :--- | :--- | :--- |
+| **[REQ-UB-01]** | `UC-01` (Browse Catalog), <br> `US-01` (Play & Library) | `USER`, `USER_LIBRARY`, `APP` | **M:N** | ✅ **Covered** |
+| **[REQ-EV-02]** | `UC-02` (Checkout Order), <br> `US-01` (Purchase Flow) | `USER`, `APP`, `USER_LIBRARY` | **M:N** | ✅ **Covered** |
+| **[REQ-EV-03]** | `UC-02` (Checkout Order), <br> `UC-Payment` (Process Payment) | `ORDER`, `ORDER_ITEM`, `Payment Gateway` | **1:N / API** | ✅ **Covered** |
+| **[REQ-ST-04]** | `UC-02` (Checkout Order) | `ORDER`, `ORDER_ITEM` | **1:N** | ✅ **Covered** |
+| **[REQ-CD-05]** | `UC-02` (Checkout Order), <br> `US-01` (Purchase Flow) | `ORDER`, `USER_LIBRARY`, `Payment Gateway` | **M:N** | ✅ **Covered** |
+| **[REQ-CD-06]** | *Відсутній (Planned for Sprint 2)* | `APP` (`parent_game_id`) | **Self-Ref** | ⚠️ **UNCOVERED** *(Технічний борг)* |
