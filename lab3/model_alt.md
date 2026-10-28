@@ -2,28 +2,27 @@
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor Gamer
-    participant OrderService as OrderService <br>(ORDER, ORDER_ITEM)
-    participant LibraryService as LibraryService <br>(USER_LIBRARY)
-    participant CatalogService as CatalogService <br>(APP)
+    autonumber off
+    actor Gamer as Гравець
+    participant Order as OrderService
+    participant Library as LibraryService
+    participant Catalog as CatalogService
 
-    Gamer->>+OrderService: submitOrder(cartId, paymentDetails)
+    Gamer->>Order: Оформити замовлення (Кошик)
     
-    loop Для кожного товару в кошику (Validate Cart Items)
-        OrderService->>+CatalogService: getAppDetails(appId)
-        CatalogService-->>-OrderService: appDetails(appType, parentGameId)
+    loop Для кожного товару в кошику
+        Order->>Catalog: Отримати деталі продукту (appId)
+        Catalog-->>Order: Повернути appType та parentGameId
     end
 
-    opt Перевірка на DLC (REQ-CD-06)
-        OrderService->>+LibraryService: checkParentGameOwnership(userId, parentGameId)
-        LibraryService-->>-OrderService: parentOwnershipResult
+    opt Перевірка на DLC
+        Order->>Library: Перевірити наявність базової гри
+        Library-->>Order: Результат перевірки parent game
     end
 
-    OrderService->>+LibraryService: validateOwnership(userId, appId)
-    LibraryService-->>-OrderService: isAlreadyOwned (True)
+    Order->>Library: Перевірити наявність гри в бібліотеці
+    Library-->>Order: Гра вже придбана (True)
 
-    alt Гра вже придбана або відсутня базова гра DLC
-        OrderService-->>Gamer: checkoutRejectedError("App already in library or base game missing")
+    alt Гра вже є або базова гра відсутня
+        Order-->>Gamer: Помилка: товар вже у бібліотеці або немає бази для DLC
     end
-    deactivate OrderService
