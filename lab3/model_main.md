@@ -3,12 +3,12 @@
 ```mermaid
 sequenceDiagram
     autonumber off
-    actor Gamer as Игрок
+    actor Gamer as Гравець
     participant Order as OrderService
     participant Library as LibraryService
     participant Bank as PaymentGateway
 
-    Gamer->>Order: Оформить заказ (Кошик)
+    Gamer->>Order: Оформити замовлення (Кошик)
     Order->>Library: Проверить наявність гри
     Library-->>Order: Гри немає (можна купувати)
     
