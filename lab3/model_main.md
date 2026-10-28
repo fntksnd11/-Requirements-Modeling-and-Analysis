@@ -2,28 +2,26 @@
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor Gamer
-    participant OrderService as OrderService <br>(ORDER, ORDER_ITEM)
-    participant LibraryService as LibraryService <br>(USER_LIBRARY)
-    participant PaymentGateway as PaymentGateway <br>(<<System>>)
+    autonumber off
+    actor Gamer as Игрок
+    participant Order as OrderService
+    participant Library as LibraryService
+    participant Bank as PaymentGateway
 
-    Gamer->>+OrderService: submitOrder(cartId, paymentDetails)
-    OrderService->>+LibraryService: validateOwnership(userId, appId)
-    LibraryService-->>-OrderService: ownershipConfirmed (Not Owned)
+    Gamer->>Order: Оформить заказ (Кошик)
+    Order->>Library: Проверить наявність гри
+    Library-->>Order: Гри немає (можна купувати)
     
-    OrderService->>OrderService: createOrder(status='Pending')
-    OrderService->>+PaymentGateway: processPayment(orderId, amount)
+    Order->>Order: Створити замовлення (Pending)
+    Order->>Bank: Провести платіж
     
-    alt Платіж успішний (Payment Successful)
-        PaymentGateway-->>OrderService: paymentSuccess(transactionId)
-        OrderService->>OrderService: updateOrderStatus(orderId, 'Completed')
-        OrderService->>+LibraryService: grantLicense(userId, appId)
-        LibraryService-->>-OrderService: licenseGranted()
-        OrderService-->>Gamer: orderCompletedConfirmation(orderId)
-    else Платіж відхилено (Payment Declined)
-        PaymentGateway-->>-OrderService: paymentFailed(errorCode)
-        OrderService->>OrderService: updateOrderStatus(orderId, 'Cancelled')
-        OrderService-->>Gamer: orderFailedError("Payment Declined")
+    alt Платіж успішний
+        Bank-->>Order: Платіж підтверджено
+        Order->>Order: Змінити статус на Completed
+        Order->>Library: Додати гру до бібліотеки
+        Order-->>Gamer: Успішна покупка!
+    else Платіж відхилено
+        Bank-->>Order: Помилка оплати
+        Order->>Order: Скасувати замовлення
+        Order-->>Gamer: Помилка: платіж не пройшов
     end
-    deactivate OrderService
