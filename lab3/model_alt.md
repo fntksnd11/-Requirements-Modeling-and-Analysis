@@ -1,28 +1,40 @@
-# Sequence Model: Альтернативний сценарій UC-02 (Перевірка кошика, дублікат або DLC)
+# Sequence Model:  Дублікат або DLC без базової гри
 
 ```mermaid
 sequenceDiagram
-    autonumber off
-    actor Gamer as Гравець
-    participant Order as OrderService
-    participant Library as LibraryService
-    participant Catalog as CatalogService
+    actor Gamer
+    participant OrderService
+    participant CatalogService
+    participant LibraryService
+    participant APP
+    participant USER_LIBRARY
 
-    Gamer->>Order: Оформити замовлення (Кошик)
-    
-    loop Для кожного товару в кошику
-        Order->>Catalog: Отримати деталі продукту (appId)
-        Catalog-->>Order: Повернути appType та parentGameId
+    Gamer->>+OrderService: submitOrder(cartId)
+
+    loop For each cart item
+        OrderService->>+CatalogService: getAppDetails(appId)
+        CatalogService->>+APP: findById(appId)
+        APP-->>-CatalogService: app_type, parent_game_id
+        CatalogService-->>-OrderService: appDetails
+
+        opt app_type == 'DLC'
+            OrderService->>+LibraryService: validateOwnership(userId, parentGameId)
+            LibraryService->>+USER_LIBRARY: existsByUserAndApp(userId, parentGameId)
+            USER_LIBRARY-->>-LibraryService: ownershipResult
+            LibraryService-->>-OrderService: parentOwnershipResult
+            break parent game is not owned
+                OrderService-->>Gamer: checkoutRejectedError(appId, 'BASE_GAME_NOT_OWNED')
+            end
+        end
+
+        OrderService->>+LibraryService: validateOwnership(userId, appId)
+        LibraryService->>+USER_LIBRARY: existsByUserAndApp(userId, appId)
+        USER_LIBRARY-->>-LibraryService: ownershipResult
+        LibraryService-->>-OrderService: ownershipResult
+        break app is already owned
+            OrderService-->>Gamer: checkoutRejectedError(appId, 'ALREADY_OWNED')
+        end
     end
 
-    opt Перевірка на DLC
-        Order->>Library: Перевірити наявність базової гри
-        Library-->>Order: Результат перевірки parent game
-    end
-
-    Order->>Library: Перевірити наявність гри в бібліотеці
-    Library-->>Order: Гра вже придбана (True)
-
-    alt Гра вже є або базова гра відсутня
-        Order-->>Gamer: Помилка: товар вже у бібліотеці або немає бази для DLC
-    end
+    deactivate OrderService
+```
